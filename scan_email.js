@@ -19,16 +19,8 @@ function scanEmail() {
                originalFileFolder.createFile(attachments[k].getName(), attachments[k].getDataAsString());
                var returned = true;
              }
-
-
          }
-
-
-
-
        threads[i].moveToTrash();
     }
   return returned;
-
-
 }

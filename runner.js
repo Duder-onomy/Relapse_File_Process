@@ -12,15 +12,15 @@ var ss = SpreadsheetApp.getActiveSpreadsheet();
 var uploadSheet = ss.insertSheet("Upload");
 var lookupSheet = ss.getSheetByName("Lookup");
 
-//lock the spreadsheet
-//get email address to watch for
-//search inbox for anything from him without the tag "processed"
-//if the email has attachement, download to relapse files folder
-//import the file
-//process it
-//save as csv, append the file name with PCU Processed and the date
-//notify me and the other people that the file is ready.
-//unlock the spreadsheet
+// lock the spreadsheet
+// get email address to watch for
+// search inbox for anything from him without the tag "processed"
+// if the email has attachement, download to relapse files folder
+// import the file
+// process it
+// save as csv, append the file name with PCU Processed and the date
+// notify me and the other people that the file is ready.
+// unlock the spreadsheet
 
 var locked = lockSpreadSheet();
 if (locked == false)
@@ -40,38 +40,37 @@ var filesToProcess = uploadFolder.getFiles();
 
 for (var i = 0; i < filesToProcess.length; i++)
   {
-  //get the file name
+  // get the file name
   var fileName = filesToProcess[i].getName();
-  //import the file
+  // import the file
   var imported = importFromCSV(fileName);
-  //Here it should check if this is a valid upload file
+  // Here it should check if this is a valid upload file
   if ((uploadSheet.getRange("A1").getValue() + ".csv") == fileName)
    {
      SpreadsheetApp.flush();
-     //process it
+     // process it
      var processed = process();
      SpreadsheetApp.flush();
-     //save as csv, append the file name with PCU Processed and the date
+     // save as csv, append the file name with PCU Processed and the date
      var saved = saveAsCSV(fileName.replace('.csv',''));
-     //EMAIL GREG TO NOTIFY TO UPLOAD FILE
+     // EMAIL GREG TO NOTIFY TO UPLOAD FILE
      var attachment = Utilities.newBlob(filesToProcess[i].getBlob());
      attachment.setName(fileName);
      MailApp.sendEmail("Greg.larrenaga@postclubusa.com", "RELAPSE FILE UPLOAD: " + fileName, "Upload This File",
      {
-       //attachments: attachment
+       // attachments: attachment
      });
-     //MailApp.sendEmail("MikeJ@relapse.com, john.kadlec@opticalexperts.com, James.dowd@postclubusa.com, lp@postclubusa.com, greg.larrenaga@postclubusa.com", "RELAPSE FILE PROCESSED: " + fileName, "This Email is Automated, but feel free to reply. I will see your reply. The file mentioned has been processed and is available in the PostClub System for label creation.",
-     //{
-       //attachments: attachment
-     //});
-     //
+     // MailApp.sendEmail("MikeJ@relapse.com, john.kadlec@opticalexperts.com, James.dowd@postclubusa.com, lp@postclubusa.com, greg.larrenaga@postclubusa.com", "RELAPSE FILE PROCESSED: " + fileName, "This Email is Automated, but feel free to reply. I will see your reply. The file mentioned has been processed and is available in the PostClub System for label creation.",
+     // {
+     //   attachments: attachment
+     // });
    }
   // move the original file to the completed folder
-  //var copy = filesToProcess[i].makeCopy(fileName + "_Original");
-  //copy.addToFolder(DocsList.getFolderById("0B8yxm0Ut_NZIVUw0MERvSXlFOHc"));
+  // var copy = filesToProcess[i].makeCopy(fileName + "_Original");
+  // copy.addToFolder(DocsList.getFolderById("0B8yxm0Ut_NZIVUw0MERvSXlFOHc"));
   filesToProcess[i].setTrashed(true);
-  //notify me and the other people that the file is ready.
-  //unlock the spreadsheet
+  // notify me and the other people that the file is ready.
+  // unlock the spreadsheet
   uploadSheet.clearContents();
   SpreadsheetApp.flush();
   uploadSheet.getRange(1, 1);
@@ -146,8 +145,6 @@ uploadSheet.insertColumnAfter(18);
 //Service
 uploadSheet.insertColumnAfter(19);
 uploadSheet.getRange(1, 20, uploadSheet.getLastRow()).setValue("TL");
-
-
 //Delete all non needed rows
 var lastRow = uploadSheet.getLastRow();
 var lookup = uploadSheet.getRange("V1");
@@ -162,11 +159,7 @@ for (var i=0;i<lastRow;i++)
         lookup = lookup.offset(1,0);
       }
   }
-
 // delete the non-needed columns
 uploadSheet.deleteColumns(21, 18);
-
 return true;
-
 }
-
